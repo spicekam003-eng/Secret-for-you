@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Hello World!</h1>
+      <p id="currentTime"></p>
+      <script src="script.js"></script>
+  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>💖 Will you be my Valentine? 💖</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #ffdde1 0%, #f9b5c0 100%);
+      font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      padding: 16px;
+    }
+
+    /* main card – soft & romantic */
+    .valentine-card {
+      background: rgba(255, 240, 245, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 60px 60px 60px 60px;
+      padding: 2.4rem 2rem;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(200, 70, 100, 0.25),
+                  0 10px 25px rgba(200, 50, 80, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.2s ease;
+      position: relative;
+      z-index: 20;
+      pointer-events: none;
+      margin: 10px;
+    }
+
+    .valentine-card * {
+      pointer-events: auto;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #a13d5e;
+      letter-spacing: -0.5px;
+      text-shadow: 0 4px 12px rgba(255, 120, 160, 0.3);
+      margin-bottom: 1.2rem;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+
+    .heart-icon {
+      display: inline-block;
+      font-size: 2.8rem;
+      line-height: 1;
+      animation: pulse 1.4s infinite alternate ease-in-out;
+      filter: drop-shadow(0 6px 10px rgba(200, 40, 80, 0.3));
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); }
+      100% { transform: scale(1.2); }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      position: relative;
+      min-height: 90px;
+    }
+
+    .btn {
+      border: none;
+      background: white;
+      padding: 0.9rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #4f2d3b;
+      box-shadow: 0 8px 18px rgba(180, 60, 100, 0.2);
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
+      background: rgba(255, 255, 255, 0.9);
+      min-width: 110px;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    .btn-yes {
+      background: #ff8da1;
+      color: #2d1422;
+      border-color: #ffb3c6;
+      box-shadow: 0 8px 20px #f98ca8a0;
+    }
+
+    .btn-yes:active {
+      background: #ff7a94;
+      transform: scale(0.96);
+    }
+
+    .btn-no {
+      background: #eae2e5;
+      color: #3f2a32;
+      border-color: #dcc8ce;
+      box-shadow: 0 6px 14px #b8a0a8a0;
+      transition: all 0.12s cubic-bezier(0.3, 1.2, 0.4, 1);
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    .btn-no-move {
+      transition: all 0.12s cubic-bezier(0.3, 1.2, 0.4, 1);
+    }
+
+    /* message after YES */
+    .love-message {
+      margin-top: 1.8rem;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #8f2e4a;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.7rem 1.4rem;
+      border-radius: 100px;
+      display: inline-block;
+      border: 1px solid #ffb0c3;
+      box-shadow: 0 4px 12px rgba(200, 70, 110, 0.2);
+      line-height: 1.4;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s cubic-bezier(0.2, 1.2, 0.4, 1);
+      pointer-events: none;
+      width: auto;
+      max-width: 90%;
+    }
+
+    .love-message.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .love-message span {
+      display: inline-block;
+      animation: pulse 1.2s infinite alternate ease-in-out;
+      margin-left: 8px;
+    }
+
+    /* ---- BALLOON (moving heart shape) ---- */
+    .balloon-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .heart-balloon {
+      position: absolute;
+      font-size: 3.8rem;
+      filter: drop-shadow(0 12px 18px rgba(200, 40, 80, 0.35));
+      animation: floatBalloon 12s infinite alternate ease-in-out;
+      transform-origin: center;
+      will-change: transform, left, top;
+      text-shadow: 0 0 12px #ff8dab;
+      transition: transform 0.2s;
+      pointer-events: none;
+    }
+
+    @keyframes floatBalloon {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(-2deg);
+      }
+      25% {
+        transform: translate(30px, -40px) scale(1.05) rotate(4deg);
+      }
+      50% {
+        transform: translate(-20px, -80px) scale(0.95) rotate(-6deg);
+      }
+      75% {
+        transform: translate(40px, -30px) scale(1.08) rotate(3deg);
+      }
+      100% {
+        transform: translate(-30px, -60px) scale(1) rotate(-1deg);
+      }
+    }
+
+    /* extra floating hearts */
+    .extra-heart {
+      position: fixed;
+      font-size: 1.6rem;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle 6s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.1; transform: scale(0.9) rotate(0deg); }
+      100% { opacity: 0.3; transform: scale(1.3) rotate(15deg); }
+    }
+
+    /* responsive */
+    @media (max-width: 480px) {
+      .valentine-card {
+        padding: 1.8rem 1.2rem;
+        border-radius: 40px;
+      }
+      h1 {
+        font-size: 1.9rem;
+      }
+      .heart-icon {
+        font-size: 2.2rem;
+      }
+      .btn {
+        font-size: 1.4rem;
+        padding: 0.7rem 1.4rem;
+        min-width: 90px;
+      }
+      .buttons {
+        gap: 1.2rem;
+        min-height: 80px;
+      }
+      .love-message {
+        font-size: 1.3rem;
+        padding: 0.5rem 1rem;
+      }
+      .heart-balloon {
+        font-size: 2.6rem;
+      }
+      .extra-heart {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      .btn {
+        font-size: 1.2rem;
+        padding: 0.6rem 1rem;
+        min-width: 70px;
+      }
+      .buttons {
+        gap: 0.8rem;
+      }
+      .love-message {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- moving heart balloon(s) -->
+  <div class="balloon-container" id="balloonContainer"></div>
+
+  <!-- background sparkle hearts -->
+  <div class="extra-heart" style="top: 12%; left: 8%; font-size: 2.2rem;">❤️</div>
+  <div class="extra-heart" style="bottom: 20%; right: 6%; font-size: 2.8rem; animation-delay: 1.2s;">❤️</div>
+  <div class="extra-heart" style="top: 30%; right: 15%; font-size: 1.8rem; animation-delay: 0.7s;">❤️</div>
+  <div class="extra-heart" style="bottom: 35%; left: 12%; font-size: 2.4rem; animation-delay: 2s;">❤️</div>
+  <div class="extra-heart" style="top: 65%; left: 80%; font-size: 2rem; animation-delay: 1.5s;">❤️</div>
+
+  <!-- MAIN CARD -->
+  <div class="valentine-card">
+    <h1>
+      <span class="heart-icon">❤️</span> 
+      Will you be my Valentine?
+      <span class="heart-icon">❤️</span>
+    </h1>
+
+    <div class="buttons">
+      <button class="btn btn-yes" id="yesBtn">💕 Yes</button>
+      <button class="btn btn-no btn-no-move" id="noBtn">No 💔</button>
+    </div>
+
+    <div id="loveMessage" class="love-message">
+      💖 I know you’d say yes! <br>
+      Love you sooooooooooo much Pattu ❤️
+      <span>🥰</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const balloonContainer = document.getElementById('balloonContainer');
+      const noBtn = document.getElementById('noBtn');
+      const yesBtn = document.getElementById('yesBtn');
+      const loveMsg = document.getElementById('loveMessage');
+
+      // ---------- CREATE MOVING HEART BALLOONS ----------
+      function createBalloons(count = 9) {
+        const emojis = ['❤️', '💕', '💖', '💗', '♥️', '❤️‍🔥', '💘', '❤️‍🩹', '💝'];
+        for (let i = 0; i < count; i++) {
+          const balloon = document.createElement('div');
+          balloon.className = 'heart-balloon';
+          const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+          balloon.textContent = emoji;
+          
+          const left = Math.random() * 85 + 5;
+          const top = Math.random() * 80 + 5;
+          balloon.style.left = left + '%';
+          balloon.style.top = top + '%';
+          
+          const size = 2.2 + Math.random() * 3.2;
+          balloon.style.fontSize = size + 'rem';
+          
+          const duration = 10 + Math.random() * 14;
+          const delay = Math.random() * -14;
+          balloon.style.animationDuration = duration + 's';
+          balloon.style.animationDelay = delay + 's';
+          
+          const randomX = (Math.random() * 140 - 70);
+          const randomY = (Math.random() * 120 - 60);
+          
+          // unique keyframes
+          const styleSheet = document.createElement("style");
+          const keyframes = `
+            @keyframes floatCustom${i} {
+              0% { transform: translate(0, 0) scale(1) rotate(-2deg); }
+              25% { transform: translate(${randomX * 0.4}px, ${randomY * 0.3 - 20}px) scale(1.05) rotate(4deg); }
+              50% { transform: translate(${randomX * 0.6}px, ${randomY * 0.5 - 40}px) scale(0.95) rotate(-6deg); }
+              75% { transform: translate(${randomX * 0.2}px, ${randomY * 0.7 - 10}px) scale(1.08) rotate(3deg); }
+              100% { transform: translate(${randomX * 0.8}px, ${randomY * 0.4 - 50}px) scale(1) rotate(-1deg); }
+            }
+          `;
+          styleSheet.textContent = keyframes;
+          document.head.appendChild(styleSheet);
+          balloon.style.animation = `floatCustom${i} ${duration}s infinite alternate ease-in-out ${delay}s`;
+          
+          balloonContainer.appendChild(balloon);
+        }
+      }
+
+      createBalloons(9);
+
+      // ---------- NO BUTTON EVASIVE ACTION (works on mobile & desktop) ----------
+      function moveNoButton() {
+        const card = document.querySelector('.valentine-card');
+        const cardRect = card.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+        
+        // relative to card
+        const cardPadding = 20;
+        const cardWidth = cardRect.width - cardPadding * 2;
+        const cardHeight = cardRect.height - cardPadding * 2;
+        const btnWidth = btnRect.width;
+        const btnHeight = btnRect.height;
+        
+        let maxLeft = Math.max(cardWidth - btnWidth, 0);
+        let maxTop = Math.max(cardHeight - btnHeight, 0);
+        
+        let newLeft = Math.random() * maxLeft;
+        let newTop = Math.random() * maxTop;
+        
+        // keep inside
+        newLeft = Math.min(Math.max(newLeft, 0), maxLeft);
+        newTop = Math.min(Math.max(newTop, 0), maxTop);
+        
+        noBtn.style.position = 'relative';
+        noBtn.style.left = newLeft + 'px';
+        noBtn.style.top = newTop + 'px';
+        noBtn.style.transform = 'translate(0, 0)';
+        noBtn.style.transition = 'all 0.12s cubic-bezier(0.3, 1.4, 0.4, 1)';
+      }
+
+      // ---- event listeners for both desktop and mobile ----
+      function handleNoInteraction(e) {
+        e.preventDefault();
+        moveNoButton();
+        noBtn.style.transform = 'scale(0.92)';
+        setTimeout(() => {
+          noBtn.style.transform = 'scale(1)';
+        }, 150);
+        // haptic feedback simulation (vibrate if available)
+        if (navigator.vibrate) navigator.vibrate(10);
+      }
+
+      // Mouse events
+      noBtn.addEventListener('mouseover', function(e) {
+        moveNoButton();
+        noBtn.style.transform = 'scale(0.93)';
+        setTimeout(() => {
+          noBtn.style.transform = 'scale(1)';
+        }, 130);
+      });
+
+      // Touch events (mobile)
+      noBtn.addEventListener('touchstart', function(e) {
+        // move on touch start, but prevent default to avoid double fire
+        handleNoInteraction(e);
+      }, { passive: false });
+
+      // also click (for safety)
+      noBtn.addEventListener('click', function(e) {
+        handleNoInteraction(e);
+      });
+
+      // reset no button position on resize (keep inside)
+      window.addEventListener('resize', function() {
+        noBtn.style.left = '0px';
+        noBtn.style.top = '0px';
+        noBtn.style.transform = 'translate(0, 0)';
+        // after a tiny delay, move it again to a random spot (optional)
+        setTimeout(() => {
+          // only if not yes pressed? we keep it playful
+        }, 20);
+      });
+
+      // ---------- YES BUTTON: show love message ----------
+      yesBtn.addEventListener('click', function() {
+        loveMsg.classList.add('show');
+        yesBtn.style.transform = 'scale(1.1)';
+        yesBtn.style.background = '#ff6b8a';
+        setTimeout(() => {
+          yesBtn.style.transform = 'scale(1)';
+        }, 200);
+
+        // make balloons bigger
+        document.querySelectorAll('.heart-balloon').forEach((b) => {
+          b.style.transition = 'transform 0.3s';
+          b.style.transform = 'scale(1.6)';
+          setTimeout(() => {
+            b.style.transform = 'scale(1)';
+          }, 400);
+        });
+
+        // haptic feedback
+        if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+      });
+
+      // initial small offset for no button
+      setTimeout(() => {
+        if (noBtn) {
+          noBtn.style.left = (Math.random() * 20 - 5) + 'px';
+          noBtn.style.top = (Math.random() * 20 - 5) + 'px';
+        }
+      }, 400);
+
+      // Prevent context menu on long press (mobile)
+      document.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.btn-no')) e.preventDefault();
+      });
+
+      console.log('💖 Happy Valentine, Pattu! 💖');
+    })();
+  </script>
+</body>
+</html>
